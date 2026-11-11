@@ -1,0 +1,41 @@
+{
+  "name": "Deck",
+  "short_name": "Deck",
+  "description": "Claude Deck on the phone: what needs you, the day, sessions, keys and the player.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#121419",
+  "theme_color": "#121419",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "id": "/",
+  "scope": "/",
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": [
+            "image/*",
+            "audio/*",
+            "video/*",
+            "application/pdf",
+            "text/plain"
+          ]
+        }
+      ]
+    }
+  }
+}

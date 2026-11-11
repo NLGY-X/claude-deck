@@ -1,0 +1,6 @@
+node_modules/
+ui/dist/
+# Your own settings: copy deck.config.example.jsonc to make it.
+deck.config.jsonc
+*.log
+.env

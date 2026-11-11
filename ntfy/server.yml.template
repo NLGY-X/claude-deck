@@ -1,0 +1,14 @@
+# ntfy for the deck. Rendered by ntfy/install.sh: the base URL and the one
+# topic the deck uses. Everything else is denied, so the topic name is the
+# only secret; a message outlives a phone that was offline for a day.
+base-url: "__BASE_URL__"
+listen-http: ":80"
+behind-proxy: true
+cache-file: "/var/cache/ntfy/cache.db"
+cache-duration: "24h"
+auth-file: "/var/lib/ntfy/user.db"
+auth-default-access: "deny-all"
+auth-access:
+  - "everyone:__TOPIC__:rw"
+enable-signup: false
+enable-login: false

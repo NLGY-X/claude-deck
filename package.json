@@ -1,0 +1,38 @@
+{
+  "name": "claude-deck",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A desk tablet (and phone) for the Claude Code sessions on a Windows PC.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24.2"
+  },
+  "scripts": {
+    "start": "node server/bridge.ts",
+    "build": "vite build ui",
+    "dev": "vite ui",
+    "test": "node --test \"server/*.test.ts\"",
+    "typecheck": "tsc -p .",
+    "status": "node server/status.ts",
+    "taps": "node server/taps.ts",
+    "hooks": "node server/hooks.ts",
+    "unhooks": "node server/hooks.ts --remove",
+    "install:task": "powershell -NoProfile -ExecutionPolicy Bypass -File server/install.ps1",
+    "uninstall:task": "powershell -NoProfile -ExecutionPolicy Bypass -File server/install.ps1 -Remove"
+  },
+  "dependencies": {
+    "@fastify/static": "^8.0.0",
+    "fastify": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.6.0",
+    "vite": "^7.0.0"
+  }
+}

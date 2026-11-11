@@ -1,0 +1,104 @@
+// The deck's settings. Copy this file to deck.config.jsonc (which git ignores)
+// and edit it. The bridge reloads the file on save and the tablet redraws, no
+// restart. `~` is your home folder; a relative path is relative to this repo.
+{
+  "port": 4771,
+
+  // Areas colour and group everything: day list items (#work on a line),
+  // Claude sessions (by the folder they run in, from `paths`) and jots.
+  // `words` let a new item guess its area. An area with `until` stops being
+  // offered after that day; one with `from` counts down to it on the Day screen.
+  "areas": [
+    { "id": "work", "label": "Work", "color": "#7aa7ff", "paths": ["~/code"], "words": ["deploy", "review", "invoice"] },
+    { "id": "home", "label": "Home", "color": "#c9a0ff", "paths": [], "words": ["house", "car", "kids"] }
+  ],
+
+  // The Day screen. `list` is the one markdown file the tablet writes and you
+  // (or Claude) can edit by hand; examples/list.md shows the format. Jots go
+  // in a `jots` folder beside it unless `jots` names another. `maxPicked` is
+  // how many items Today holds.
+  "day": {
+    "list": "~/Documents/Day/list.md",
+    "maxPicked": 5
+  },
+
+  // "So far today" counts your commits since midnight in these repos. A folder
+  // that is not a repo counts every repo directly inside it.
+  "report": { "repos": ["~/code"] },
+
+  // Phone push through ntfy (bash ntfy/install.sh sets up the topic). With
+  // `sessions` on, a session that starts waiting on you sends one push.
+  "push": { "sessions": true },
+
+  // The dock on the Keys screen. `icon` names a brand in ui/src/brands.ts.
+  // `proc` is the process name used to spot the app running and bring it to
+  // the front instead of opening a second copy. `open` is what to start when
+  // it is not running: an exe, a URL, or shell:AppsFolder\<id> for a Store app
+  // (Get-StartApps in PowerShell lists the ids).
+  "apps": [
+    { "label": "Claude", "icon": "claude", "proc": "claude", "open": "shell:AppsFolder\\Claude_pzs8sxrjxfjjc!Claude" },
+    { "label": "Cursor", "icon": "cursor", "proc": "cursor", "open": "cursor" },
+    { "label": "Terminal", "icon": "terminal", "proc": "windowsterminal", "open": "shell:AppsFolder\\Microsoft.WindowsTerminal_8wekyb3d8bbwe!App" },
+    { "label": "Chrome", "icon": "googlechrome", "proc": "chrome", "open": "chrome" },
+    { "label": "Spotify", "icon": "spotify", "proc": "spotify", "open": "shell:AppsFolder\\SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify" },
+    { "label": "GitHub", "icon": "github", "open": "https://github.com" }
+  ],
+
+  // Prompt keys. `text` is pasted into the target and left for you to send;
+  // `send: true` also presses Enter. `keys` sends a chord instead of text.
+  // A line starting with ! runs as a shell command inside Claude Code.
+  "prompts": {
+    "Claude Code": [
+      { "title": "Check the source", "icon": "search", "text": "Before you answer, open the actual source document or code and quote the line you are relying on. If you can't find one, say so." },
+      { "title": "Review this diff", "icon": "eye", "text": "Review the uncommitted diff for bugs. Worst first, file and line for each, and say plainly if there are none." },
+      { "title": "Run tests, fix", "icon": "check", "text": "Run the test suite. Fix what fails, then run it again and show me the output." },
+      { "title": "Plan first", "icon": "map", "text": "Before writing any code, write the plan: files you will touch, what changes in each, and how you will check it works. Then wait for my OK." },
+      { "title": "Explain this error", "icon": "bug", "text": "Read the last error. Find the cause, not the symptom, and tell me in one line before you change anything." },
+      { "title": "Commit message", "icon": "pen", "text": "Draft the commit message for the staged changes in this repo's house style. Don't commit yet." },
+      { "title": "Simplify", "icon": "scissors", "text": "Cut everything this change does not need. Same behaviour, fewer lines. Show me the diff." },
+      { "title": "Clear context", "icon": "broom", "text": "/clear", "send": true },
+      { "title": "Compact", "icon": "fold", "text": "/compact", "send": true }
+    ],
+    "Git": [
+      { "title": "Status", "icon": "list", "text": "!git status -sb", "send": true },
+      { "title": "Pull", "icon": "down", "text": "!git pull --rebase", "send": true },
+      { "title": "Last 10 commits", "icon": "list", "text": "!git log --oneline -10", "send": true },
+      { "title": "Diff stat", "icon": "eye", "text": "!git diff --stat", "send": true },
+      { "title": "Push branch", "icon": "up", "text": "!git push -u origin HEAD" },
+      { "title": "Open a PR", "icon": "pr", "text": "Open a PR for this branch with gh. Show me the title and body before you create it." }
+    ],
+    "Keys": [
+      // Claude Code dictation, if you bind voice:pushToTalk to Alt+K in
+      // ~/.claude/keybindings.json.
+      { "title": "Talk", "icon": "mic", "keys": "Alt+K" },
+      { "title": "Next tab", "icon": "right", "keys": "Ctrl+Tab" },
+      { "title": "Previous tab", "icon": "left", "keys": "Ctrl+Shift+Tab" },
+      { "title": "Escape", "icon": "x", "keys": "Esc" },
+      { "title": "Accept", "icon": "check", "keys": "Enter" },
+      { "title": "Switch window", "icon": "window", "keys": "Alt+Tab" },
+      { "title": "Snip screen", "icon": "crop", "keys": "Win+Shift+S" }
+    ]
+  },
+
+  // Seats start a fresh Claude session in `dir` with `brief` as its
+  // instructions. {clipboard} is replaced with whatever text is on the PC's
+  // clipboard. `why` opens the brief, so the agent knows what the work is
+  // for, and it is what the key shows.
+  "seats": [
+    {
+      "title": "Explain what I copied",
+      "icon": "search",
+      "dir": "~/code",
+      "why": "Understand a stack trace, a log line or a snippet without switching windows.",
+      "needsClipboard": true,
+      "brief": "Explain this, in plain words, and say what you would check first:\n\n{clipboard}\n\nRead files if you need to. Change nothing."
+    },
+    {
+      "title": "Morning repo sweep",
+      "icon": "radar",
+      "dir": "~/code",
+      "why": "Start the day knowing which repos have uncommitted work or unpushed branches.",
+      "brief": "For each git repo directly under this folder, list uncommitted changes and branches ahead of their remote. One line per repo, nothing for a clean one. Change nothing."
+    }
+  ]
+}
